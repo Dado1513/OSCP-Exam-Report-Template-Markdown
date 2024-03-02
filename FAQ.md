@@ -41,11 +41,19 @@ And add `-H deeplists.tex` option to pandoc CLI when generating the PDF.
 
 Example:
 
-```
+```md
 ![ImgPlaceholder](img/placeholder-image-300x225.png)
 ```
 
-The path can be relative from the generating script or the `src` folder. You can adjust this behavior by editing the `--resource-path` option in the `generate.rb` script. For possible options, see [pandoc options](https://pandoc.org/MANUAL.html#general-options). 
+The path can be:
+
+- any absolute path
+- relative from the working directory
+- relative from `./src` folder
+- relative from `/usr/share/osert/src` folder
+- relative from any (relative or absolute) path you provide with `--resource-path`, e.g. `ruby osert.rb generate -r /tmp/mycert`
+
+For possible options, see [pandoc options](https://pandoc.org/MANUAL.html#general-options).
 
 ## Syntax highlight style ignored when no language provided
 
@@ -53,9 +61,9 @@ https://github.com/jgm/pandoc/issues/6104
 
 Puts `default` as a language for all code blocks which don't have a language set.
 
-Eg.
+E.g.
 
-~~~
+~~~md
 ```default
 raw code
 ```
@@ -63,7 +71,7 @@ raw code
 
 ## How do I know what markdown formatting is supported (there are so many different version)?
 
-In `generate.rb`, `markdown` [is used](https://github.com/noraj/OSCP-Exam-Report-Template-Markdown/blob/50aeada2b6171c3a4fe96d91a10f632d752063f2/generate.rb#L82-L93) as `--to` formatter for `pandoc` which means it will use [Pandoc markdown](https://pandoc.org/MANUAL.html#pandocs-markdown) (similar to GFM [[1](https://docs.gitlab.com/ee/user/markdown.html)] [[2](https://github.github.com/gfm/)].) Else other syntaxes (commonmark, GFM, MultiMarkdown, PHP Markdown Extra) are supported too, see [pandoc options](https://pandoc.org/MANUAL.html#option--to). If you want to use another syntax you can generate your report using the [manual command](https://github.com/noraj/OSCP-Exam-Report-Template-Markdown#manual).
+In `osert.rb`, `markdown` [is used](https://github.com/noraj/OSCP-Exam-Report-Template-Markdown/blob/50aeada2b6171c3a4fe96d91a10f632d752063f2/generate.rb#L82-L93) as `--to` formatter for `pandoc` which means it will use [Pandoc markdown](https://pandoc.org/MANUAL.html#pandocs-markdown) (similar to GFM [[1](https://docs.gitlab.com/ee/user/markdown.html)] [[2](https://github.github.com/gfm/)].) Else other syntaxes (commonmark, GFM, MultiMarkdown, PHP Markdown Extra) are supported too, see [pandoc options](https://pandoc.org/MANUAL.html#option--to). If you want to use another syntax you can generate your report using the [manual command](https://github.com/noraj/OSCP-Exam-Report-Template-Markdown#manual).
 
 ## Why very long lines in code blocks overflow the page?
 
@@ -82,7 +90,7 @@ Issue tracking:
 Pandoc supports [those languages](https://github.com/jgm/pandoc-highlight/blob/master/Text/Pandoc/Highlighting.hs#L93),
 to list them you can use `pandoc --list-highlight-languages`.
 
-XL-SEC made a one liner to quickly generate a dummy code block for each language:
+XL-SEC made a one-liner to quickly generate a dummy code block for each language:
 
 ```zsh
 $ (for f in $(pandoc --list-highlight-languages); do echo "\`\`\`$f"; echo '$ echo "some output from '$f'"'; echo "some output from $f"; echo "# whoami"; echo "root"; echo "\`\`\`"; echo ""; done;) > highlight-languages.md
@@ -93,3 +101,33 @@ Then testing all syntax highlight styles for all languages:
 ```zsh
 $ for s in $(pandoc --list-highlight-styles); do pandoc --template eisvogel --highlight-style $s -o highlight-$s.pdf highlight-languages.md; done;
 ```
+
+## Why are my images formatted in the wrong locations?
+
+This is a [known and open issue with pandoc](https://github.com/jgm/pandoc/issues/845). A simple hack is to create a file called `disable_float.tex` with the following content:
+
+```latex
+\usepackage{float}
+\let\origfigure\figure
+\let\endorigfigure\endfigure
+\renewenvironment{figure}[1][2] {
+    \expandafter\origfigure\expandafter[H]
+} {
+    \endorigfigure
+}
+```
+
+Then add `-H path/to/disable_float.tex` to your `pandoc` command when rendering the report. This will force `pandoc` to render the images in the order that they appear in the original Markdown file while also preserving their captions. [Source](http://stackoverflow.com/a/33801326/1407737).
+
+## How to highlight changes made to exploit code?
+
+When Offensive Security says you have to highlight the changes you made to the exploit, they mean you have to show / explain what you changed in the code but your are free to choose how to do that.
+
+Unfortunately, unlike [AsciiDoc](https://docs.asciidoctor.org/asciidoc/latest/verbatim/highlight-lines/), Markdown is more limited and doesn't allow highlighting a line in a code block.
+
+Alternatively what you can do is:
+
+- Take a screenshot and add a red rectangle and arrows, then include the image in Markdown
+- Make a diff between the original exploit and the one you modified, then create a code block with `diff` as a language for syntax highlight
+- Write paragraphs and illustrate with short code blocks including the lines you changed
+- Using a more complex solution with Lua filters to introduce a markup for line highlight, e.g. https://github.com/jgm/pandoc/issues/7743

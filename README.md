@@ -1,11 +1,11 @@
 # Offensive Security Exam Report Template in Markdown
 
-[![Rawsec's CyberSecurity Inventory](https://inventory.raw.pm/img/badges/Rawsec-inventoried-FF5050_flat-square.svg)](https://inventory.rawsec.ml/tools.html#OSCP%20Exam%20Report%20Template%20in%20Markdown)
+[![Rawsec's CyberSecurity Inventory](https://inventory.raw.pm/img/badges/Rawsec-inventoried-FF5050_flat-square.svg)](https://inventory.raw.pm/tools.html#OSCP%20Exam%20Report%20Template%20in%20Markdown)
 [![GitHub stars](https://img.shields.io/github/stars/noraj/OSCP-Exam-Report-Template-Markdown?style=flat-square)](https://github.com/noraj/OSCP-Exam-Report-Template-Markdown/stargazers)
 [![GitHub forks](https://img.shields.io/github/forks/noraj/OSCP-Exam-Report-Template-Markdown?style=flat-square)](https://github.com/noraj/OSCP-Exam-Report-Template-Markdown/network)
 [![GitHub license](https://img.shields.io/github/license/noraj/OSCP-Exam-Report-Template-Markdown?style=flat-square)](https://github.com/noraj/OSCP-Exam-Report-Template-Markdown/blob/master/LICENSE)
 
-I created an **Offensive Security Exam Report Template in Markdown** so LaTeX, Microsoft Office Word, LibreOffice Writer are no longer needed during your Offensive Security OSCP, OSWE, OSCE, OSEE, OSWP, OSEP, OSED exam!
+I created an **Offensive Security Exam Report Template in Markdown** so LaTeX, Microsoft Office Word, LibreOffice Writer are no longer needed during your Offensive Security OSCP, OSWE, OSEE, OSWP, OSEP, OSED, OSWA, OSDA, OSMR exam!
 
 Now you can be efficient and faster during your exam report redaction!
 
@@ -58,15 +58,25 @@ There is a script that will:
 4. Generate the 7z archive
 5. Output MD5 hash for verification after uploading
 
+Choose and copy a template that you will use to write your report:
+
+```bash
+ruby osert.rb init
 ```
-ruby generate.rb
+
+Generate your PDF report and 7z archive
+
+```bash
+ruby osert.rb generate
 ```
+
+Note: If you run the generation several times, you may want to check the options (`ruby osert.rb generate -h`) to save time on the interactive prompt.
 
 ### Manual
 
 Generate the report PDF from the markdown template:
 
-```
+```bash
 pandoc src/OSCP-exam-report-template_whoisflynn_v3.2.md \
 -o output/OSCP-OS-XXXXX-Exam-Report.pdf \
 --from markdown+yaml_metadata_block+raw_html \
@@ -75,7 +85,7 @@ pandoc src/OSCP-exam-report-template_whoisflynn_v3.2.md \
 --toc-depth 6 \
 --number-sections \
 --top-level-division=chapter \
---highlight-style breezedark
+--highlight-style breezedark \
 --resource-path=.:src
 ```
 
@@ -102,7 +112,7 @@ Syntax highlight themes can be listed with `pandoc --list-highlight-styles`.
 
 Report Templates:
 
-Penetration Testing:
+Network Penetration Testing:
 
 - **OSCP**
   - [Official Offensive Security Template v1](output/examples/OSCP-exam-report-template_OS_v1.pdf)
@@ -116,6 +126,8 @@ Penetration Testing:
 
 Web Application:
 
+- **OSWA**
+  - [Official Offensive Security Template v1](output/examples/OSWA-exam-report-template_OS_v1.pdf)
 - **OSWE**
   - [Official Offensive Security Template v1](output/examples/OSWE-exam-report-template_OS_v1.pdf)
   - [noraj][noraj] improved [template](output/examples/OSWE-exam-report-template_noraj_v1.pdf) v1
@@ -130,6 +142,13 @@ Exploit Development:
   - [Official Offensive Security Template v1](output/examples/OSEE-exam-report-template_OS_v1.pdf)
 - **OSCE** (**deprecated**)
   - [Official Offensive Security Template v1](output/examples/OSCE-exam-report-template_OS_v1.pdf)
+- **OSMR**
+   - [Official Offensive Security Template v1](output/examples/OSMR-exam-report-template_OS_v1.pdf)
+
+Security Operations:
+
+- **OSDA**
+  - [Official Offensive Security Template v1](output/examples/OSDA-exam-report-template_OS_v1.pdf)
 
 [whoisflynn]:https://github.com/whoisflynn
 [noraj]:https://github.com/noraj
@@ -139,15 +158,18 @@ Exploit Development:
 
 Offensive Security course table:
 
-Exam acronym | Exam name                                         | Lab acronym | Lab name                                  | Course designation
--------------|---------------------------------------------------|-------------|-------------------------------------------|-------------------
-**OSCP**     | Offensive Security Certified Professional         | PWK         | Penetration Testing with Kali Linux       | PEN-200
-**OSWP**     | Offensive Security Wireless Professional          | OSWA        | Offensive Security Wireless Attacks       | PEN-210
-**OSEP**     | Offensive Security Experienced Penetration Tester | ETBD        | Evasion Techniques and Breaching Defenses | PEN-300
-**OSWE**     | Offensive Security Web Expert                     | AWAE        | Advanced Web Attacks and Exploitation     | WEB-300
-**OSED**     | Offensive Security Exploit Developer              | WUMED       | Windows User Mode Exploit Development     | EXP-301
-**OSEE**     | Offensive Security Exploitation Expert            | AWE         | Advanced Windows Exploitation             | EXP-401
-**OSCE**     | Offensive Security Certified Expert               | CTP         | Cracking the Perimeter                    | N/A
+Exam acronym | Exam name                                         | Lab acronym | Lab name                                   | Course designation
+-------------|---------------------------------------------------|-------------|--------------------------------------------|-------------------
+**OSCP**     | Offensive Security Certified Professional         | PWK         | Penetration Testing with Kali Linux        | PEN-200
+**OSWP**     | Offensive Security Wireless Professional          | WA          | Wireless Attacks                           | PEN-210
+**OSEP**     | Offensive Security Experienced Penetration Tester | ETBD        | Evasion Techniques and Breaching Defenses  | PEN-300
+**OSWA**     | Offensive Security Web Assessor                   | WAKL        | Web Attacks with Kali Linux                | WEB-200
+**OSWE**     | Offensive Security Web Expert                     | AWAE        | Advanced Web Attacks and Exploitation      | WEB-300
+**OSED**     | Offensive Security Exploit Developer              | WUMED       | Windows User Mode Exploit Development      | EXP-301
+**OSMR**     | Offensive Security macOS Researcher               | MCB         | macOS Control Bypasses                     | EXP-312
+**OSEE**     | Offensive Security Exploitation Expert            | AWE         | Advanced Windows Exploitation              | EXP-401
+**OSCE**     | Offensive Security Certified Expert               | CTP         | Cracking the Perimeter                     | N/A
+**OSDA**     | Offensive Security Defense Analyst                | SODA        | Security Operations and Defensive Analysis | SOC-200
 
 ## Community projects
 
@@ -165,9 +187,9 @@ Docker containers:
 - 3rd [Top Offensive Security Open Source Projects](https://awesomeopensource.com/projects/offensive-security) (2022-01-27)
 - Recent mentions on social medias: [Social-searcher](https://www.social-searcher.com/social-buzz/?q5=https%3A%2F%2Fgithub.com%2Fnoraj%2FOSCP-Exam-Report-Template-Markdown)
 - Articles:
-  - ~~[Stress-free OSCP report making](https://craigunder.me/stress-free-oscp-report-making/)~~ by Craig Underhill (2020-04-06)
   - [Unofficial OSCP Approved Tools](https://falconspy.medium.com/unofficial-oscp-approved-tools-b2b4e889e707) by FalconSpy (2019-06-05)
   - [Journey from nothing to OSCP](https://cjhackerz.net/posts/journey-from-nothing-to-oscp/) by CJHackerz (2020-06-30)
+  - Stress-free OSCP report making by Craig Underhill (2020-04-06) ([Raw Archive](https://web.archive.org/web/20210729100632/https://craigunder.me/stress-free-oscp-report-making/), use `about:reader?url=` for better look in Firefox)
 
 ## Stargazers over time
 
@@ -196,6 +218,12 @@ Report Templates:
 - **OSEP**
   - [Official Offensive Security Template](https://help.offensive-security.com/hc/en-us/articles/360050293792-OSEP-Exam-Guide#suggested-documentation-templates) (UNLICENSED)
   - [ceso improved template](src/OSEP-exam-report-template_ceso_v1.md) (UNLICENSED)
+- **OSWA**
+  - [Official Offensive Security Template](https://help.offensive-security.com/hc/en-us/articles/4410105650964-OSWA-Exam-Guide#suggested-documentation-templates) (UNLICENSED)
+- **OSDA**
+  - [Official Offensive Security Template](https://help.offensive-security.com/hc/en-us/articles/4410105675412-OSDA-Exam-Guide#h_01GGD1AKE9DRDAJZ91PXZ5X0PN) (UNLICENSED)
+- **OSMR**
+  - [Official Offensive Security Template](https://help.offensive-security.com/hc/en-us/articles/4411107766804-OSMR-Exam-Guide#OSMRExamGuide-SuggestedDocumentationTemplates) (UNLICENSED)
 
 Pandoc Template:
 
